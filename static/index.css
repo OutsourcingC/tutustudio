@@ -1,0 +1,134 @@
+
+
+* {
+    box-sizing: border-box;
+}
+
+.card-body, body {
+    font-size: 16px;
+}
+
+@keyframes animation_for_def_card_body {
+    0% {
+      transform: translateY(-100%);
+    }
+
+    100% {
+      transform: translateY(0%)
+    }
+}
+
+@keyframes animation_logo {
+    0% {
+      opacity: 0;
+    }
+
+    75% {
+        opacity: 0;
+    }
+
+    100% {
+      opacity: 0.75;
+    }
+}
+
+#logo_image {
+    position: absolute;
+    content: url("images/logo.png");
+    width: 100px;
+    height: 100px;
+    opacity: 0.75;
+    filter: contrast(500%);
+    z-index: 99;
+    animation: animation_logo 2s ease;
+}
+
+.def_card_body {
+    position: relative;
+    padding-top: 70% !important;
+    padding-bottom: 25% !important;
+    background-image: url("images/8.png");
+    background-size: cover;
+    background-position: center;
+    animation: animation_for_def_card_body 2s ease-out;
+}
+
+.def_text {
+    margin-top: 40%;
+}
+
+.index_title {
+    font-size: xxx-large;
+    font-family: Arial sans-serif;
+}
+
+/* information_details */
+.information_details {
+    background-image: url("images/background_image.jpg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.information_details_card_body {
+    padding: 20% 15% !important;
+    font-family: "Times New Roman", serif;
+}
+
+.information_details_title {
+    margin-top: 20%;
+    font-weight: bold;
+}
+
+.information_details .instruction_content {
+    color: #ff9155;
+    font-size: 16px;
+}
+
+.instruction_content_img_one {
+    background-image: url("images/01.GIF");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.instruction_content_img_two {
+    width: 100%;
+    height: 130px;
+    background-image: url("images/02.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+/* Carousel */
+.carousel_image.instruction_content_img_one {
+    height: 300px;
+}
+
+.carousel_image {
+    background-repeat: no-repeat;
+    background-size: 100% 100%
+}
+
+.carousel_image:not(.instruction_content_img_one) {
+    background-size: cover; /* 可以使用 cover、contain 或其他值 */
+    background-repeat: no-repeat;
+    background-position: center center;
+    aspect-ratio: 16 / 16; /* 设置所需的宽高比例 */
+}
+
+@keyframes animation_for_other_elements {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+*:not(.def_card_body):not(#logo_image):not(#carousel *) {
+    opacity: 1;
+    animation: animation_for_other_elements 3s ease;
+}
+
+
