@@ -1,5 +1,4 @@
 from datetime import date
-
 from flask import Flask, render_template, url_for, request, jsonify
 
 from database import db
