@@ -13,3 +13,18 @@ label {
 .w-80 {
     width: 80% !important;
 }
+
+@keyframes animation_for_datepicker {
+    0% {
+        opacity: 0.3;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.ui-state-active {
+    opacity: 1;
+    animation: animation_for_datepicker 1s ease-out;
+}

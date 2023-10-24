@@ -1,6 +1,6 @@
 function sendEmail() {
   const formData = {
-  date: $('input[name="date"]').val(),
+  date: $('div[id="datepicker"]').val(),
   name: $('input[name="name"]').val(),
   last_name: $('input[name="lastName"]').val(),
   phone_number: $('input[name="phoneNumber"]').val(),
