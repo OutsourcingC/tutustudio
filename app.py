@@ -1,5 +1,5 @@
-from datetime import date
 from flask import Flask, render_template, url_for, request, jsonify
+from datetime import time
 
 from database import db
 from utils.match_pattern import match_pattern
@@ -34,7 +34,7 @@ def reserve():
     return render_template('reserve.html', numbers=numbers, times=times, favicon=favicon_img)
 
 
-@app.route('/send_email', methods=['POST'])
+@app.route('/api/send_email', methods=['POST'])
 def send_email_api():
     post_data = request.json
 
@@ -49,25 +49,21 @@ def send_email_api():
     return jsonify(response), response['status']
 
 
-@app.route('/search/GetOrderDayData', methods=["POST"])
-def get_order_day_data():
+@app.route('/api/get_reserve_date', methods=["POST"])
+def get_reserve_datewad():
     reservation = db.Reservation
 
     json_data = request.json
-    order_time = json_data["order_time"].split('/')
+    order_time = json_data["order_time"].split('/')[::-1]
 
     response = (
         reservation.
-        select().
-        where(reservation.date == date(*map(lambda x: int(x), order_time)))
+        select()
     )
 
-    print(response)
-    print('aa', response.people)
+    for data in response:
+        print(data.hour)
 
-    people_number = 0
-    for i in response:
-        people_number += response.people
     return jsonify({
         "ava_count": people_number,
         "times": list(map(
