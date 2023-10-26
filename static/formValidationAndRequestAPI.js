@@ -1,4 +1,6 @@
 function sendEmail() {
+    const submitButton = $("#submit_button");
+
     const formData = {
         date: $('div[id="datepicker"]').val(),
         name: $('input[name="name"]').val(),
@@ -16,9 +18,11 @@ function sendEmail() {
         contentType: 'application/json',
         success: function (response) {
             alert(response.message)
+            submitButton.prop("disabled", false); // 等待接口请求完之后, 重新启用按钮
         },
         error: function (response) {
             alert(response.responseJSON.message)
+            submitButton.prop("disabled", false); // 等待接口请求完之后, 重新启用按钮
         }
     });
 }
@@ -56,6 +60,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById('hour_box_select').addEventListener('change', validateHourSelect);
     document.getElementById('form_reserve').addEventListener('submit', function (e) {
+        const submitButton = $("#submit_button");
+        submitButton.prop("disabled", true); // 禁用submit 按钮防止频繁点击重复请求接口
         validateHourSelect(); // 在表单提交前再次验证
         if (document.getElementById('hour_box_select').checkValidity() === false) {
             e.preventDefault(); // 阻止表单提交

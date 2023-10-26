@@ -1,9 +1,10 @@
 function getReverseDate (dateText) {
+    console.log(dateText)
     $.ajax({
         type: 'POST',
         url: '/api/get_reserve_date',
         data: JSON.stringify({
-            "order_time": dateText
+            "date_text": dateText
         }),
         contentType: 'application/json',
     });
@@ -11,7 +12,6 @@ function getReverseDate (dateText) {
 
 $(document).ready(function () {
     const dateBox = $("#datepicker")
-    getReverseDate(dateBox.value) // 初始化, 首次刷新
 
     dateBox.datepicker({
         dateFormat: "dd/mm/yy",
@@ -33,4 +33,6 @@ $(document).ready(function () {
     });
 
     dateBox.datepicker("setDate", new Date());
+
+    getReverseDate($.datepicker.formatDate('dd/mm/yy', dateBox.datepicker('getDate'))) // 初始化, 首次刷新
 });

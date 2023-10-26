@@ -50,27 +50,21 @@ def send_email_api():
 
 
 @app.route('/api/get_reserve_date', methods=["POST"])
-def get_reserve_datewad():
+def get_reserve_date():
     reservation = db.Reservation
 
     json_data = request.json
-    order_time = json_data["order_time"].split('/')[::-1]
+    date_text = json_data["date_text"].split('/')[::-1]
 
     response = (
         reservation.
-        select()
+        select().
+        where(reservation.date == '-'.join(date_text)).
+        order_by(reservation.hour)
     )
 
     for data in response:
         print(data.hour)
-
-    return jsonify({
-        "ava_count": people_number,
-        "times": list(map(
-            lambda x: x.hour,
-            response
-        ))
-    })
 
 
 if __name__ == '__main__':
