@@ -1,9 +1,12 @@
 from flask import Flask, render_template, url_for, request, jsonify
+
+from peewee import fn
+from database import db
 from datetime import time
 
-from database import db
 from utils.match_pattern import match_pattern
 from utils.send_email import send_email
+
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static'
@@ -26,11 +29,8 @@ def home():
 @app.route('/reserve', methods=['GET'])
 def reserve():
     favicon_img = url_for('static', filename='images/favicon.png')
-    numbers = list(range(1, 15))
-    times = ['12:30', '12:45', '13:00', '13:15', '13:30', '13:45', '14:00', '14:15', '14:30', '14:45', '15:00', '15:15',
-             '15:30', '15:45', '16:00', '16:15', '16:30', '16:45', '17:00', '17:15', '17:30', '17:45', '18:00', '18:15',
-             '18:30', '18:45', '19:00', '19:15', '19:30', '19:45', '20:00', '20:15', '20:30', '20:45', '21:00', '21:15',
-             '21:30', '21:45', '22:00']
+    numbers = list(range(1, 11))
+    times = ["11:00", "14:00", "17:00"]
     return render_template('reserve.html', numbers=numbers, times=times, favicon=favicon_img)
 
 
@@ -55,16 +55,30 @@ def get_reserve_date():
 
     json_data = request.json
     date_text = json_data["date_text"].split('/')[::-1]
+    time_slots = ["11:00", "14:00", "17:00"]
+    slots_to_remove = []
 
-    response = (
-        reservation.
-        select().
-        where(reservation.date == '-'.join(date_text)).
-        order_by(reservation.hour)
-    )
+    for time_slot in time_slots:
+        query = (
+            reservation.
+            select(reservation.hour).
+            where((reservation.date == '-'.join(date_text)) & (reservation.hour == time_slot)).
+            group_by(reservation.hour).
+            having(fn.SUM(reservation.people) >= 10)
+        )
 
-    for data in response:
-        print(data.hour)
+        for row in query:
+            slots_to_remove.append(row.hour.strftime('%H:%M'))
+
+    for slot in slots_to_remove:
+        time_slots.remove(slot)
+
+    response = {
+        'message': time_slots,
+        'status': 200,
+    }
+
+    return jsonify(response), response['status']
 
 
 if __name__ == '__main__':

@@ -7,7 +7,7 @@ def match_pattern(post_data):
         'name': r"^[a-zA-Z]+$",
         'last_name': r"^[a-zA-Z]+$",
         'phone_number': r"^\d{9}$",
-        'number_of_people': r"^\d$",
+        'number_of_people': r"^\d+$",
         'time_of_reserve': r"^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$"
     }
 
