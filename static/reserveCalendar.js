@@ -1,10 +1,11 @@
-function getReverseDate (dateText) {
-    console.log(dateText)
+function getReverseDate (dateText, reserveTime) {
+    console.log(reserveTime)
     $.ajax({
         type: 'POST',
         url: '/api/get_reserve_date',
         data: JSON.stringify({
-            "date_text": dateText
+            "date_text": dateText,
+            "reserve_time":reserveTime,
         }),
         contentType: 'application/json',
     });
@@ -28,7 +29,8 @@ $(document).ready(function () {
             }
         },
         onSelect: function (dateText) {
-            getReverseDate(dateText) // 每次更新日期刷新
+            const reserveTime = $("#hour_box_select")
+            getReverseDate(dateText, reserveTime.val()) // 每次更新日期刷新
         }
     });
 

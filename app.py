@@ -55,26 +55,19 @@ def get_reserve_date():
 
     json_data = request.json
     date_text = json_data["date_text"].split('/')[::-1]
-    time_slots = ["11:00", "14:00", "17:00"]
-    slots_to_remove = []
+    reserve_time = json_data["reserve_time"]
 
-    for time_slot in time_slots:
-        query = (
-            reservation.
-            select(reservation.hour).
-            where((reservation.date == '-'.join(date_text)) & (reservation.hour == time_slot)).
-            group_by(reservation.hour).
-            having(fn.SUM(reservation.people) >= 10)
-        )
+    query = (
+        reservation.
+        select(reservation.hour, fn.SUM(reservation.people).alias('total_people')).
+        where((reservation.date == '-'.join(date_text)) & (reservation.hour == reserve_time)).
+        group_by(reservation.hour)
+    )
 
-        for row in query:
-            slots_to_remove.append(row.hour.strftime('%H:%M'))
-
-    for slot in slots_to_remove:
-        time_slots.remove(slot)
+    result = query.get()
 
     response = {
-        'message': time_slots,
+        'message': result.total_people,
         'status': 200,
     }
 
