@@ -2,7 +2,6 @@ from flask import Flask, render_template, url_for, request, jsonify
 
 from peewee import fn
 from database import db
-from datetime import time
 
 from utils.match_pattern import match_pattern
 from utils.send_email import send_email
@@ -29,9 +28,9 @@ def home():
 @app.route('/reserve', methods=['GET'])
 def reserve():
     favicon_img = url_for('static', filename='images/favicon.png')
-    numbers = list(range(1, 11))
+    people = list(range(1, 11))
     times = ["11:00", "14:00", "17:00"]
-    return render_template('reserve.html', numbers=numbers, times=times, favicon=favicon_img)
+    return render_template('reserve.html', people=people, times=times, favicon=favicon_img)
 
 
 @app.route('/api/send_email', methods=['POST'])
@@ -49,8 +48,8 @@ def send_email_api():
     return jsonify(response), response['status']
 
 
-@app.route('/api/get_reserve_date', methods=["POST"])
-def get_reserve_date():
+@app.route('/api/get_reserve_peaple', methods=["POST"])
+def get_reserve_peaple():
     reservation = db.Reservation
 
     json_data = request.json
@@ -64,10 +63,21 @@ def get_reserve_date():
         group_by(reservation.hour)
     )
 
-    result = query.get()
+    if query.get_or_none() is None:
+        result = list(range(1, 11))
+        isComplementFull = False
+    else:
+        result = query.get().total_people
+        if result >= 10:
+            result = ['Completamente lleno']
+            isComplementFull = True
+        else:
+            result = list(range(1, 11-result))
+            isComplementFull = False
 
     response = {
-        'message': result.total_people,
+        'message': result,
+        'isComplementFull': isComplementFull,
         'status': 200,
     }
 

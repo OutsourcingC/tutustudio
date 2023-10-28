@@ -15,7 +15,6 @@
   <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 </head>
 <body>
-
   <form id="form_reserve" class="d-flex justify-content-center flex-column">
     <div class="col-auto mt-4 d-flex justify-content-center align-items-center">
 {#      <label for="datepicker" class="me-3 form-label">Fecha</label>#}
@@ -42,8 +41,8 @@
       <div class="col-sm-6">
         <label for="people_box_select" class="me-3 form-label">Personas</label>
         <select class="form-select w-100 text-center border-1" id="people_box_select" name="numberOfPeople" required>
-          {% for number in numbers %}
-            <option value="{{ number }}">{{ number }} persona{% if number > 1 %}s{% endif %}</option>
+          {% for person in people %}
+            <option value="{{ person }}">{{ person }} persona{% if person > 1 %}s{% endif %}</option>
           {% endfor %}
         </select>
       </div>
@@ -66,5 +65,6 @@
 
   <script type="text/javascript" src="{{ url_for('static', filename='reserveCalendar.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='formValidationAndRequestAPI.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='re-RenderPeopleSelectBox.js') }}"></script>
 </body>
 </html>

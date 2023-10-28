@@ -16,11 +16,11 @@ function sendEmail() {
         url: '/api/send_email',
         data: JSON.stringify(formData),
         contentType: 'application/json',
-        success: function (response) {
+        success: function(response) {
             alert(response.message)
             submitButton.prop("disabled", false); // 等待接口请求完之后, 重新启用按钮
         },
-        error: function (response) {
+        error: function(response) {
             alert(response.responseJSON.message)
             submitButton.prop("disabled", false); // 等待接口请求完之后, 重新启用按钮
         }
@@ -53,13 +53,13 @@ function validateHourSelect() {
     }
 }
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
     addValidation("name_box");
     addValidation("lastName_box");
     addValidation("phone_number_box");
 
     document.getElementById('hour_box_select').addEventListener('change', validateHourSelect);
-    document.getElementById('form_reserve').addEventListener('submit', function (e) {
+    document.getElementById('form_reserve').addEventListener('submit', function(e) {
         const submitButton = $("#submit_button");
         submitButton.prop("disabled", true); // 禁用submit 按钮防止频繁点击重复请求接口
         validateHourSelect(); // 在表单提交前再次验证
