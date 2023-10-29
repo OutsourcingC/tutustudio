@@ -50,8 +50,8 @@
         <label for="hour_box_select" class="me-3 form-label">Hora</label>
         <select class="form-select w-100 text-center" id="hour_box_select" name="time">
           <option value="-1" disabled selected>Seleccione</option>
-          {% for time in times %}
-            <option value="{{ time }}">{{ time }}</option>
+          {% for time, time_value in times.items() %}
+            <option value="{{ time_value }}">{{ time }}</option>
           {% endfor %}
         </select>
       </div>
