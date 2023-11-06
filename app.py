@@ -25,6 +25,13 @@ def home():
     return render_template('index.html', image_urls=image_urls, favicon=favicon_img)
 
 
+@app.route('/super_user_gestion', methods=['GET'])
+def super_user_gestion():
+    favicon_img = url_for('static', filename='images/favicon.png')
+
+    return render_template('super_user_gestion.html', favicon=favicon_img)
+
+
 @app.route('/reserve', methods=['GET'])
 def reserve():
     favicon_img = url_for('static', filename='images/favicon.png')
@@ -85,19 +92,19 @@ def get_reserve_peaple():
 
     if query.get_or_none() is None:
         result = list(range(1, 11))
-        isComplementFull = False
+        is_complement_full = False
     else:
         result = query.get().total_people
         if result >= 10:
             result = ['Completamente lleno']
-            isComplementFull = True
+            is_complement_full = True
         else:
             result = list(range(1, 11-result))
-            isComplementFull = False
+            is_complement_full = False
 
     response = {
         'message': result,
-        'isComplementFull': isComplementFull,
+        'isComplementFull': is_complement_full,
         'status': 200,
     }
 

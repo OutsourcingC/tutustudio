@@ -19,6 +19,11 @@ function sendEmail() {
         success: function(response) {
             alert(response.message)
             submitButton.prop("disabled", false); // 等待接口请求完之后, 重新启用按钮
+
+            let selectedValue = $("#hour_box_select").val();
+            let dateText = $("#datepicker").val()
+
+            getReversePeaple(dateText, selectedValue)
         },
         error: function(response) {
             alert(response.responseJSON.message)
