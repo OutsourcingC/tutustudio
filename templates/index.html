@@ -1,67 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
-  <title>TUTU STUDIO</title>
-  <link rel="icon" type="image/png" sizes="64x64" href="{{ favicon }}">
+    <title>TUTU STUDIO</title>
+    <link rel="icon" type="image/png" sizes="64x64" href="{{ favicon }}">
 
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSS/index.css') }}">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSS/index.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-      crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"></script>
 </head>
 <body>
 {#  part index  #}
 <div class="card border-0" style="width: 100%">
-  {#  Logo  #}
-  <img id="logo_image" src="" alt="Logo">
+    {#  Logo  #}
+    <img id="logo_image" src="" alt="Logo">
 
-  <div class="def_card_body card-body">
-    <h5 class="card-title text-center text-white">BIENVENIDOS A</h5>
-    <h1 class="index_title card-title text-center mt-3 text-white">TUTU STUDIO</h1>
-    <p class="def_text card-text text-center text-white">Tufting, creando arte en belleza.</p>
-    <div class="text-center">
-      <a href="{{ url_for('reserve') }}" class="btn btn-outline-danger m-3 mb-5">RESERVAR</a>
+    <div class="def_card_body card-body">
+        <h5 class="card-title text-center text-white">BIENVENIDOS A</h5>
+        <h1 class="index_title card-title text-center mt-3 text-white">TUTU STUDIO</h1>
+        <p class="def_text card-text text-center text-white">Tufting, creando arte en belleza.</p>
+        <div class="text-center">
+            <a href="{{ url_for('reserve') }}" class="btn btn-outline-danger m-3 mb-5">RESERVAR</a>
+        </div>
     </div>
-  </div>
 </div>
 
 {#  information_details  #}
 <div class="information_details card border-0" style="width: 100%">
-  <div class="information_details_card_body card-body">
-    <h1 class="information_details_title card-title mb-4">Que es el Tufting？</h1>
-    <p class="instruction_content card-text">
-      El Tufting es un método que te permite diseñar y fabricar tus propias alfombras. Utilizas una pistola de
-      Tufting para crear el patrón que más te guste. Es un proceso sencillo y rápido, lo que significa que puedes
-      hacer una alfombra que se adapte perfectamente a la decoración de tu hogar.
-    </p>
-    <div class="instruction_content_img_one carousel_image"></div>
-    <p class="instruction_content card-text">
-      La ventaja del Tufting es que puedes personalizar la alfombra según tu gusto y las necesidades de la
-      habitación. Puedes elegir los colores, patrones y el tamaño que desees.
-    </p>
-    <div class="instruction_content_img_two"></div>
-    <p class="instruction_content card-text  mt-2">
-      Además, es una forma de expresión creativa. Puedes utilizar diferentes hilos y diseños para mostrar tu
-      creatividad y convertir la alfombra en parte de la decoración de tu hogar.
-    </p>
+    <div class="information_details_card_body card-body">
+        <h1 class="information_details_title card-title mb-4">Que es el Tufting？</h1>
+        <p class="instruction_content card-text">
+            El Tufting es un método que te permite diseñar y fabricar tus propias alfombras. Utilizas una pistola de
+            Tufting para crear el patrón que más te guste. Es un proceso sencillo y rápido, lo que significa que puedes
+            hacer una alfombra que se adapte perfectamente a la decoración de tu hogar.
+        </p>
+        <div class="instruction_content_img_one carousel_image"></div>
+        <p class="instruction_content card-text">
+            La ventaja del Tufting es que puedes personalizar la alfombra según tu gusto y las necesidades de la
+            habitación. Puedes elegir los colores, patrones y el tamaño que desees.
+        </p>
+        <div class="instruction_content_img_two"></div>
+        <p class="instruction_content card-text  mt-2">
+            Además, es una forma de expresión creativa. Puedes utilizar diferentes hilos y diseños para mostrar tu
+            creatividad y convertir la alfombra en parte de la decoración de tu hogar.
+        </p>
 
-    {#  Carousel  #}
-    <div id="carousel" class="carousel slide" data-bs-ride="carousel">
-      <div class="carousel-inner">
-        {% for image_url in image_urls %}
-          <div class="carousel-item {% if loop.first %}active{% endif %}" data-bs-interval="3000">
-            <div class="d-block w-100 carousel_image" style="background-image: url({{ image_url }});"></div>
-          </div>
-        {% endfor %}
-      </div>
+        {#  Carousel  #}
+        <div id="carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                {% for image_url in image_urls %}
+                    <div class="carousel-item {% if loop.first %}active{% endif %}" data-bs-interval="3000">
+                        <div class="d-block w-100 carousel_image" style="background-image: url({{ image_url }});"></div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 </body>

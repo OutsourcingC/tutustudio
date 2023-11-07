@@ -2,15 +2,18 @@ from flask import Flask, render_template, url_for, request, jsonify
 
 from peewee import fn
 from database import db
+from datetime import datetime
 
 from utils.match_pattern import match_pattern
 from utils.send_email import send_email
+from utils.login_verification import decrypt_cipher_text, password_validation
 
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static'
 
 
+""" Web Page """
 @app.route('/', methods=['GET'])
 def home():
     favicon_img = url_for('static', filename='images/favicon.png')
@@ -25,13 +28,6 @@ def home():
     return render_template('index.html', image_urls=image_urls, favicon=favicon_img)
 
 
-@app.route('/super_user_gestion', methods=['GET'])
-def super_user_gestion():
-    favicon_img = url_for('static', filename='images/favicon.png')
-
-    return render_template('super_user_gestion.html', favicon=favicon_img)
-
-
 @app.route('/reserve', methods=['GET'])
 def reserve():
     favicon_img = url_for('static', filename='images/favicon.png')
@@ -41,7 +37,6 @@ def reserve():
         "11:30": "11:00",
         "12:00": "11:00",
         "12:30": "11:00",
-
         "13:00": "11:00",
         "13:30": "11:00",
         "14:00": "14:00",
@@ -60,6 +55,14 @@ def reserve():
     return render_template('reserve.html', people=people, times=times, favicon=favicon_img)
 
 
+@app.route('/super_user_login', methods=['GET'])
+def super_user_login():
+    favicon_img = url_for('static', filename='images/favicon.png')
+
+    return render_template('super_user_login.html', favicon=favicon_img)
+
+
+""" API """
 @app.route('/api/send_email', methods=['POST'])
 def send_email_api():
     post_data = request.json
@@ -69,46 +72,74 @@ def send_email_api():
     else:
         response = {
             'message': 'Input error',
-            'status': 400,
+            'status': 'error',
+            'status_code': 400,
         }
 
-    return jsonify(response), response['status']
+    return jsonify(response), response['status_code']
 
 
 @app.route('/api/get_reserve_peaple', methods=["POST"])
 def get_reserve_peaple():
-    reservation = db.Reservation
-
     json_data = request.json
-    date_text = json_data["date_text"].split('/')[::-1]
+    date_text = json_data["date_text"]
     reserve_time = json_data["reserve_time"]
 
-    query = (
-        reservation.
-        select(reservation.hour, fn.SUM(reservation.people).alias('total_people')).
-        where((reservation.date == '-'.join(date_text)) & (reservation.hour == reserve_time)).
-        group_by(reservation.hour)
+    reservation = db.Reservation
+
+    try:
+        datetime.strptime(date_text, '%d/%m/%Y')
+        datetime.strptime(reserve_time, '%H:%M')
+
+        query = (
+            reservation.
+            select(reservation.hour, fn.SUM(reservation.people).alias('total_people')).
+            where((reservation.date == '-'.join(date_text.split('/')[::-1])) & (reservation.hour == reserve_time)).
+            group_by(reservation.hour)
     )
 
-    if query.get_or_none() is None:
-        result = list(range(1, 11))
-        is_complement_full = False
-    else:
-        result = query.get().total_people
-        if result >= 10:
-            result = ['Completamente lleno']
-            is_complement_full = True
-        else:
-            result = list(range(1, 11-result))
+
+        if query.get_or_none() is None:
+            result = list(range(1, 11))
             is_complement_full = False
+        else:
+            result = query.get().total_people
+            if result >= 10:
+                result = ['Completamente lleno']
+                is_complement_full = True
+            else:
+                result = list(range(1, 11-result))
+                is_complement_full = False
 
-    response = {
-        'message': result,
-        'isComplementFull': is_complement_full,
-        'status': 200,
+        response = {
+            'message': 'petición exitosa',
+            'data': result,
+            'is_complement_full': is_complement_full,
+            'status': "success",
+            'status_code': 200,
+        }
+    except:
+        response = {
+            'message': 'parametro error',
+            'data': None,
+            'is_complement_full': None,
+            'status': "error",
+            'status_code': 400,
+        }
+
+    return jsonify(response), response['status_code']
+
+
+@app.route('/api/super_user_login', methods=['POST'])
+def api_super_user_login():
+    default_account = {
+        "username": "tuturoot",
+        "password": "",
     }
+    encrypted_data = request.json
 
-    return jsonify(response), response['status']
+    print(dict(encrypted_data))
+    return None
 
 
 if __name__ == '__main__':

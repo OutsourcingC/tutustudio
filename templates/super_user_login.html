@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="icon" type="image/png" sizes="64x64" href={{ favicon }}>
+    <title>Login</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/super_user_login_page.css') }}">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div class="login-container" id="login-container">
+    <form class="login-content" id="login-content" onsubmit="loginAccount(); return false;">
+        <h2>登录</h2>
+        <input type="text" name="username" id="username" placeholder="用户名">
+        <input type="password" name="password" id="password" placeholder="密码 ">
+        <label id="error-message" style="text-align: start; color: red; font-size: 13px"></label>
+        <button type="submit">登录</button>
+    </form>
+</div>
+
+<script type="text/javascript" src="{{ url_for('static', filename='JavaScript/superUserLogin.js') }}"></script>
+</body>
+</html>

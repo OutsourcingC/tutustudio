@@ -33,10 +33,10 @@ function getReversePeaple(dateText, reserveTime) {
         }),
         contentType: 'application/json',
         success: function(response, status) {
-            if (response.isComplementFull) {
-                ifComplementFull(response.message)
+            if (response.is_complement_full) {
+                ifComplementFull(response.data)
             } else {
-                ifComplementFNotull(response.message)
+                ifComplementFNotull(response.data)
             }
         }
     });

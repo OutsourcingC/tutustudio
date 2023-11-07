@@ -1,23 +1,33 @@
+const loginAccount = function() {
+    const username = $("#username").val()
+    const plaintext = $("#password").val()
 
-const plaintext = "Hello, World!";
+    const iv = CryptoJS.lib.WordArray.random(16);
+    const key = CryptoJS.lib.WordArray.random(32);
 
-// 生成随机IV
-const iv = CryptoJS.lib.WordArray.random(16); // 16字节的IV
+    const ciphertext = CryptoJS.AES.encrypt(
+        plaintext,
+        key,
+        {
+            iv: iv,
+        }
+    ).toString();
 
-// 密钥（需要与后端相同）
-const key = CryptoJS.lib.WordArray.random(32); // 32字节密钥
+    const encryptedData = {
+        usaername: username,
+        iv: iv.toString(CryptoJS.enc.Base64),
+        key: key.toString(CryptoJS.enc.Base64),
+        ciphertext: ciphertext,
+    };
 
-// 加密
-const ciphertext = CryptoJS.AES.encrypt(plaintext, key, {
-  iv: iv,
-}).toString();
+    $.ajax({
+        type: 'POST',
+        url: '/api/super_user_login',
+        data: JSON.stringify(encryptedData),
+        contentType: 'application/json',
+        success: function(response, status) {
+            console.log("success")
+        }
+    });
+}
 
-// 将IV和密文一起发送到后端
-const encryptedData = {
-  iv: iv.toString(CryptoJS.enc.Base64),
-  key: key.toString(CryptoJS.enc.Base64),
-  ciphertext: ciphertext,
-};
-
-console.log(encryptedData)
-// 发送encryptedData到后端

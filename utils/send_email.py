@@ -70,7 +70,8 @@ def send_email(data: dict):
         )
         return {
             'message': 'Enviado correctamente',
-            'status': 200,
+            'status': 'success',
+            'status_code': 200,
         }
     except smtplib.SMTPException as e:
         print("Error:", str(e))
