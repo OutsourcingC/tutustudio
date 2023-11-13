@@ -8,7 +8,6 @@ from utils.match_pattern import match_pattern
 from utils.send_email import send_email
 from utils.login_verification import decrypt_cipher_text, password_validation
 
-
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static'
 
