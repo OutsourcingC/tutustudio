@@ -53,7 +53,7 @@ def send_email(data: dict):
     try:
         smtp_obj = smtplib.SMTP_SSL('smtp.gmail.com', 465)
         smtp_obj.login(sender, password)
-        smtp_obj.sendmail(sender, receivers, message.as_string())
+        # smtp_obj.sendmail(sender, receivers, message.as_string())
         smtp_obj.quit()
 
         # create database data
