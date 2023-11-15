@@ -3,10 +3,11 @@ from flask import Flask, render_template, url_for, request, jsonify
 from peewee import fn
 from database import db
 from datetime import datetime
+import hashlib
 
 from utils.match_pattern import match_pattern
 from utils.send_email import send_email
-from utils.login_verification import decrypt_cipher_text, password_validation
+from utils.login_verification import decrypt_cipher_text, account_validation
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static'
@@ -131,13 +132,13 @@ def get_reserve_peaple():
 
 @app.route('/api/super_user_login', methods=['POST'])
 def api_super_user_login():
-    default_account = {
-        "username": "tuturoot",
-        "password": "",
-    }
     encrypted_data = request.json
 
-    print(dict(encrypted_data))
+    username = encrypted_data['username']
+    password = hashlib.sha256(decrypt_cipher_text(encrypted_data)).hexdigest()
+
+    validation_result = account_validation(username = username, password = password)
+
     return None
 
 

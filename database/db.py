@@ -1,7 +1,11 @@
 from peewee import *
 import hashlib
+import os
 
-db = SqliteDatabase("database.db")
+script_path = os.path.abspath(__file__)
+project_root = os.path.dirname(os.path.dirname(script_path))
+
+db = SqliteDatabase(fr"{project_root}\database.db")
 
 class Reservation(Model):
     date = DateField()
@@ -15,21 +19,20 @@ class Reservation(Model):
         database = db
 
 
-class User(Model):
+class Users(Model):
     username = CharField()
     password = CharField()
 
     class Meta:
         database = db
-        table_name = 'users'
 
 
 db.connect()
 db.create_tables([Reservation])
-db.create_tables([User])
+db.create_tables([Users])
 
 if __name__ == '__main__':
-    User.create(
+    Users.create(
         username='tutustudiobcn',
         password=hashlib.sha256(b'z13646885180').hexdigest()
     )

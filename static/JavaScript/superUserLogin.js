@@ -1,6 +1,16 @@
+function containsSpace(inputValue) {
+    let spaceRegex = /\s/;
+    return spaceRegex.test(inputValue);
+}
+
 const loginAccount = function() {
     const username = $("#username").val()
     const plaintext = $("#password").val()
+    if (containsSpace(username) && containsSpace(plaintext)) {
+        const errorInputSpaceLabel = $("#error-input-space")
+        errorInputSpaceLabel.val("输入框中包含空格")
+        return null;
+    }
 
     const iv = CryptoJS.lib.WordArray.random(16);
     const key = CryptoJS.lib.WordArray.random(32);
@@ -14,7 +24,7 @@ const loginAccount = function() {
     ).toString();
 
     const encryptedData = {
-        usaername: username,
+        username: username,
         iv: iv.toString(CryptoJS.enc.Base64),
         key: key.toString(CryptoJS.enc.Base64),
         ciphertext: ciphertext,
@@ -30,4 +40,5 @@ const loginAccount = function() {
         }
     });
 }
+
 
