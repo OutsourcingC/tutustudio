@@ -23,6 +23,10 @@ const loginAccount = function() {
     let username = usernameInputBox.val()
     let password = passwordInputBox.val()
 
+    if (username === "" || password === "") {
+        errorMessageLabel.text("输入框不能为空")
+        return null;
+    }
 
     const iv = CryptoJS.lib.WordArray.random(16);
     const key = CryptoJS.lib.WordArray.random(32);
@@ -48,7 +52,7 @@ const loginAccount = function() {
         data: JSON.stringify(encryptedData),
         contentType: 'application/json',
         success: function(response, status) {
-            console.log("success")
+            console.log(response, status)
         },
         error: function(response, status) {
             errorMessageLabel.text(response.responseJSON.message)

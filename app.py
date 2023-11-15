@@ -1,8 +1,10 @@
 from flask import Flask, render_template, url_for, request, jsonify
+from flask_jwt_extended import JWTManager, create_access_token
+import secrets
 
 from peewee import fn
 from database import db
-from datetime import datetime
+from datetime import datetime, timedelta
 import hashlib
 
 from utils.match_pattern import match_pattern
@@ -11,7 +13,9 @@ from utils.login_verification import decrypt_cipher_text, account_validation
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static'
+app.config["JWT_SECRET_KEY"] = str(secrets.SystemRandom().getrandbits(128))
 
+JWT = JWTManager(app)
 
 """ Web Page """
 @app.route('/', methods=['GET'])
@@ -143,9 +147,26 @@ def api_super_user_login():
             'message': '用户名或密码错误',
             'status': "error validation of account",
             'status_code': 400,
+            'token': None,
         }
     else:
+        additional_claims = {
+            'sub': username,  # 用户标识
+            'exp': int(timedelta(hours=1).total_seconds())  # 有效时间为1小时
+        }
 
+        # 生成token
+        access_token = create_access_token(
+            identity = username,
+            additional_claims = additional_claims
+        )
+
+        response = {
+            'message': '登入成功',
+            'status': "success",
+            'status_code': 200,
+            'token': access_token,
+        }
 
     return response, response["status_code"]
 
