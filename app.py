@@ -135,11 +135,20 @@ def api_super_user_login():
     encrypted_data = request.json
 
     username = encrypted_data['username']
-    password = hashlib.sha256(decrypt_cipher_text(encrypted_data)).hexdigest()
+    password = decrypt_cipher_text(encrypted_data)
+    password = hashlib.sha256(password).hexdigest()
 
     validation_result = account_validation(username = username, password = password)
+    if not validation_result:
+        response = {
+            'message': '用户名或密码错误',
+            'status': "error validation of account",
+            'status_code': 400,
+        }
+    else:
 
-    return None
+
+    return response, response["status_code"]
 
 
 if __name__ == '__main__':
