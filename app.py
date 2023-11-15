@@ -135,8 +135,7 @@ def api_super_user_login():
     encrypted_data = request.json
 
     username = encrypted_data['username']
-    password = decrypt_cipher_text(encrypted_data)
-    password = hashlib.sha256(password).hexdigest()
+    password = hashlib.sha256(decrypt_cipher_text(encrypted_data)).hexdigest()
 
     validation_result = account_validation(username = username, password = password)
     if not validation_result:
