@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for, request, jsonify
-from flask_jwt_extended import JWTManager, create_access_token
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required
 import secrets
 
 from peewee import fn
@@ -14,6 +14,8 @@ from utils.login_verification import decrypt_cipher_text, account_validation
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static'
 app.config["JWT_SECRET_KEY"] = str(secrets.SystemRandom().getrandbits(128))
+app.config['JWT_HEADER_NAME'] = 'Access-Token'  # 指定头部名为 access-token
+app.config['JWT_HEADER_TYPE'] = ''  # 将认证方案设置为空字符串
 
 JWT = JWTManager(app)
 
@@ -152,7 +154,7 @@ def api_super_user_login():
     else:
         additional_claims = {
             'sub': username,  # 用户标识
-            'exp': int(timedelta(hours=1).total_seconds())  # 有效时间为1小时
+            'exp': datetime.utcnow() + timedelta(seconds=30)  # 有效时间为1小时
         }
 
         # 生成token
@@ -168,7 +170,17 @@ def api_super_user_login():
             'token': access_token,
         }
 
+    print(access_token)
     return response, response["status_code"]
+
+
+""" Protected """
+@app.route('/super_user_gestion', methods=['GET'])
+@jwt_required()
+def super_user_gestion():
+    favicon_img = url_for('static', filename='images/favicon.png')
+
+    return render_template('super_user_gestion.html', favicon=favicon_img)
 
 
 if __name__ == '__main__':
