@@ -15,31 +15,31 @@ def send_email(data: dict):
     <!DOCTYPE html>
     <html lang="en">
     <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-      <title>Reservar</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <title>Reservar</title>
     </head>
     <body style="width: 100%; box-sizing: border-box; margin: 0; padding: 0">
-      <div style="width: 100%; height: 2px; background-color: cornflowerblue; margin-top: 30px;"></div>
-      <div style="padding: 0 20px">
-        <h3 style="padding-left: 10px; text-align: left;">您有新的预约</h3>
-        <hr style="width: 100%;">
-        <h4>客户信息:</h4>
-
-        <div style="width: 100%; height: auto; background-color: #e6e6e6">
-        <div id="information_block" style="height: auto; margin-left: 20px; padding-top: 5px;">
-          <p>Fecha: {data["date"]}</p>
-          <div style="display: flex;">
-            <p>Nombre: {data["name"]}</p>
-            <p style="padding-left: 30px;">Apellido: {data["last_name"]}</p>
-          </div>
-          <p>TEL: {data["phone_number"]}</p>
-          <div style="display: flex;">
-            <p>Persona: {data["number_of_people"]}</p>
-            <p style="padding-left: 30px;">Hora: {data["time_of_reserve"]}</p>
-          </div>
+        <div style="width: 100%; height: 2px; background-color: cornflowerblue; margin-top: 30px;"></div>
+        <div style="padding: 0 20px">
+            <h3 style="padding-left: 10px; text-align: left;">您有新的预约</h3>
+            <hr style="width: 100%;">
+            <h4>客户信息:</h4>
+  
+            <div style="width: 100%; height: auto; background-color: #e6e6e6">
+            <div id="information_block" style="height: auto; margin-left: 20px; padding-top: 5px;">
+                <p>Fecha: {data["date"]}</p>
+                <div style="display: flex;">
+                    <p>Nombre: {data["name"]}</p>
+                    <p style="padding-left: 30px;">Apellido: {data["last_name"]}</p>
+                </div>
+                <p>TEL: {data["phone_number"]}</p>
+                <div style="display: flex;">
+                    <p>Persona: {data["number_of_people"]}</p>
+                    <p style="padding-left: 30px;">Hora: {data["time_of_reserve"]}</p>
+                </div>
+            </div>
         </div>
-      </div>
     </body>
     </html>
     """
@@ -59,14 +59,14 @@ def send_email(data: dict):
         # create database data
         time_m, time_s = data['time_of_reserve'].split(":")
         db.Reservation.create(
-            date=date(
+            date = date(
                 *map(lambda x: int(x), data['date'].split("/")[::-1])
             ),
-            name=data['name'],
-            last_name=data['last_name'],
-            phone=data['phone_number'],
-            people=data['number_of_people'],
-            hour=time(int(time_m), int(time_s))
+            name = data['name'],
+            last_name = data['last_name'],
+            phone = data['phone_number'],
+            people = data['number_of_people'],
+            hour = time(int(time_m), int(time_s))
         )
         return {
             'message': 'Enviado correctamente',

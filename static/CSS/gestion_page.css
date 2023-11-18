@@ -1,0 +1,51 @@
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    background: url("../images/8.png") no-repeat fixed center;
+    background-size: cover;
+}
+
+@keyframes animation_for_datepicker {
+    0% {
+        opacity: 0.3;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.ui-state-active {
+    opacity: 1;
+    animation: animation_for_datepicker 1s ease-out;
+}
+
+#infomation_client {
+    position: relative;
+    height: 300px;
+    border: black 1px solid;
+    border-radius: 25px;
+    overflow: hidden;
+}
+
+#infomation_client::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+
+    width: calc(100% + 20px);
+    height: calc(100% + 20px);
+
+    background-color: rgba(255,255,255,0.5);
+    filter: blur(3px);
+    z-index: -1;
+    overflow: hidden;
+}

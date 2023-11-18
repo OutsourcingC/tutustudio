@@ -20,8 +20,6 @@
 <body>
 <form id="form_reserve" class="d-flex justify-content-center flex-column">
     <div class="col-auto mt-4 d-flex justify-content-center align-items-center">
-        {#      <label for="datepicker" class="me-3 form-label">Fecha</label>#}
-        {#      <input class="form-control w-50 text-center border-1" type="text" id="datepicker" name="date">#}
         <div id="datepicker"></div>
     </div>
 
@@ -69,7 +67,7 @@
     </div>
 </form>
 
-<script type="text/javascript" src="{{ url_for('static', filename='JavaScript/reserveCalendar.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='JavaScript/calendar.js') }}"></script>
 <script type="text/javascript"
         src="{{ url_for('static', filename='JavaScript/re-RenderPeopleSelectBox.js') }}"></script>
 <script type="text/javascript"

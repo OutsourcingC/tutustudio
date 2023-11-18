@@ -19,24 +19,6 @@ function containsSpace(inputValue) {
     }
 }
 
-const jumpRoute = function(){
-    const accessToken = localStorage.getItem("accessToken")
-
-    const xhr = new XMLHttpRequest()
-    xhr.open("GET", "/super_user_gestion", true)
-    xhr.setRequestHeader('Access-Token', accessToken)
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                window.location.href = "/super_user_gestion";
-            } else {
-                console.error('Error:', xhr.status);
-            }
-        }
-    };
-    xhr.send()
-}
-
 const loginAccount = function() {
     let username = usernameInputBox.val()
     let password = passwordInputBox.val()
@@ -70,15 +52,15 @@ const loginAccount = function() {
         data: JSON.stringify(encryptedData),
         contentType: 'application/json',
         success: function(response, status) {
-            localStorage.setItem("accessToken", response.token)
-            jumpRoute()
+            localStorage.setItem("accessToken", response.token);
+            document.cookie = "ACCESS_TOKEN=" + response.token
+            window.location.href = "/super_user_gestion"
         },
         error: function(response, status) {
             errorMessageLabel.text(response.responseJSON.message)
         }
     });
 }
-
 
 usernameInputBox.on("input", function() {
     containsSpace(this.value)

@@ -10,6 +10,7 @@ import hashlib
 from utils.match_pattern import match_pattern
 from utils.send_email import send_email
 from utils.login_verification import decrypt_cipher_text, account_validation
+from utils.verify_jwt import validate_jwt_from_cookie
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static'
@@ -102,8 +103,7 @@ def get_reserve_peaple():
             select(reservation.hour, fn.SUM(reservation.people).alias('total_people')).
             where((reservation.date == '-'.join(date_text.split('/')[::-1])) & (reservation.hour == reserve_time)).
             group_by(reservation.hour)
-    )
-
+        )
 
         if query.get_or_none() is None:
             result = list(range(1, 11))
@@ -154,7 +154,7 @@ def api_super_user_login():
     else:
         additional_claims = {
             'sub': username,  # 用户标识
-            'exp': datetime.utcnow() + timedelta(seconds=30)  # 有效时间为1小时
+            'exp': datetime.utcnow() + timedelta(hours = 2, seconds=30)  # 有效时间为1小时
         }
 
         # 生成token
@@ -170,17 +170,21 @@ def api_super_user_login():
             'token': access_token,
         }
 
-    print(access_token)
     return response, response["status_code"]
 
 
-""" Protected """
+""" Protected page"""
 @app.route('/super_user_gestion', methods=['GET'])
-@jwt_required()
 def super_user_gestion():
-    favicon_img = url_for('static', filename='images/favicon.png')
+    access_token = request.cookies.get('ACCESS_TOKEN')
+    current_user, status_code, response = validate_jwt_from_cookie(access_token)
 
-    return render_template('super_user_gestion.html', favicon=favicon_img)
+    if current_user is not None:
+        favicon_img = url_for('static', filename='images/favicon.png')
+
+        return render_template('super_user_gestion.html', favicon = favicon_img)
+    else:
+        return response, status_code
 
 
 if __name__ == '__main__':
