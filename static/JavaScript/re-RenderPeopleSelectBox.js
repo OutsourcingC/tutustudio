@@ -23,13 +23,13 @@ function ifComplementFNotull(data) {
     });
 }
 
-function getReversePeaple(dateText, reserveTime) {
+function getReversePeaple(dateText, reserveHour) {
     $.ajax({
         type: 'POST',
         url: '/api/get_reserve_peaple',
         data: JSON.stringify({
             "date_text": dateText,
-            "reserve_time":reserveTime,
+            "reserve_hour":reserveHour,
         }),
         contentType: 'application/json',
         success: function(response, status) {

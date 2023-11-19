@@ -1,2 +1,6 @@
-GET http://localhost:5000/super_user_gestion
-Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwMDI0NDg0MywianRpIjoiYTgwMGFlMzYtYmM1Zi00YWEzLTljYmUtYThlMmNlYmJiODlhIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InR1dHVzdHVkaW9iY24iLCJuYmYiOjE3MDAyNDQ4NDMsImV4cCI6MTcwMDI0NDg3M30.1YSpCCClXosRr4qq4K8gqQ1t2V2-B_e1ViUwx65onFU
+POST http://localhost:5000/api/get_client_information
+Content-Type: application/json
+
+{
+  "date_text": "20/11/2023"
+}

@@ -90,19 +90,19 @@ def send_email_api():
 def get_reserve_peaple():
     json_data = request.json
     date_text = json_data["date_text"]
-    reserve_time = json_data["reserve_time"]
+    reserve_hour = json_data["reserve_hour"]
 
     reservation = db.Reservation
 
     try:
         datetime.strptime(date_text, '%d/%m/%Y')
-        datetime.strptime(reserve_time, '%H:%M')
+        datetime.strptime(reserve_hour, '%H:%M')
 
         query = (
             reservation.
-            select(reservation.hour, fn.SUM(reservation.people).alias('total_people')).
-            where((reservation.date == '-'.join(date_text.split('/')[::-1])) & (reservation.hour == reserve_time)).
-            group_by(reservation.hour)
+            select(reservation.reserve_hour, fn.SUM(reservation.people).alias('total_people')).
+            where((reservation.date == '-'.join(date_text.split('/')[::-1])) & (reservation.reserve_hour == reserve_hour)).
+            group_by(reservation.reserve_hour)
         )
 
         if query.get_or_none() is None:
@@ -185,6 +185,46 @@ def super_user_gestion():
         return render_template('super_user_gestion.html', favicon = favicon_img)
     else:
         return response, status_code
+
+
+''' Protected API '''
+@app.route('/api/get_client_information', methods=['POST'])
+@jwt_required()
+def get_client_information():
+    json_data = request.json
+    date_text = json_data["date_text"]
+    HTML_content = ''
+
+    reservation = db.Reservation
+
+    datetime.strptime(date_text, '%d/%m/%Y')
+
+    query = (
+        reservation.
+            select().
+            where(reservation.date == '-'.join(date_text.split('/')[::-1]))
+    )
+
+    if query.get_or_none() is None:
+        HTML_content += 'No hay ninguna ciente'
+    else:
+        for row in query:
+            HTML_content += f'''
+            <div class="mt-3 pt-4" id="infomation_client" client-id="{row.id}">
+             <div class="px-3" id="information_detail">
+                 <p>Nombre: {row.name}</p>
+                 <p>Apellido: {row.last_name}</p>
+                 <p>TEL: {row.phone}</p>
+                 <p>Personas: {row.people}</p>
+                 <p>Tiempo: {row.reserve_time}</p>
+                 <div class="d-flex justify-content-between align-items-center pt-2" id="flex_box">
+                     <button class="btn btn-primary" id="button_delete_data">Eliminar</button>
+                     <p class="m-0">{row.date.strftime('%d/%m/%Y')}</p>
+                 </div>
+             </div>
+         </div>'''
+
+    return HTML_content
 
 
 if __name__ == '__main__':

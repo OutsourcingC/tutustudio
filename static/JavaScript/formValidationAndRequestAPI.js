@@ -7,7 +7,8 @@ function sendEmail() {
         last_name: $('input[name="lastName"]').val(),
         phone_number: $('input[name="phoneNumber"]').val(),
         number_of_people: $('select[name="numberOfPeople"]').val(),
-        time_of_reserve: $('select[name="time"]').val()
+        reserve_hour: $('select[name="time"]').val(),
+        time_of_reserve: $('select[name="time"] option:selected').text()
     };
 
     // 发送 POST 请求到 API

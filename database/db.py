@@ -12,7 +12,8 @@ class Reservation(Model):
     last_name = CharField()
     phone = CharField()
     people = IntegerField()
-    hour = TimeField()
+    reserve_hour = TimeField()
+    reserve_time = TimeField()
 
     class Meta:
         database = db

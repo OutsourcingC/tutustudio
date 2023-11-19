@@ -57,7 +57,8 @@ def send_email(data: dict):
         smtp_obj.quit()
 
         # create database data
-        time_m, time_s = data['time_of_reserve'].split(":")
+        reserve_hour_m, reserve_hour_s = data['reserve_hour'].split(":")
+        reserve_time_m, reserve_time_s = data['time_of_reserve'].split(":")
         db.Reservation.create(
             date = date(
                 *map(lambda x: int(x), data['date'].split("/")[::-1])
@@ -66,7 +67,8 @@ def send_email(data: dict):
             last_name = data['last_name'],
             phone = data['phone_number'],
             people = data['number_of_people'],
-            hour = time(int(time_m), int(time_s))
+            reserve_hour = time(int(reserve_hour_m), int(reserve_hour_s)),
+            reserve_time = time(int(reserve_time_m), int(reserve_time_s))
         )
         return {
             'message': 'Enviado correctamente',
