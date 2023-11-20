@@ -1,13 +1,15 @@
+const accessToken = localStorage.getItem("accessToken")
+
 const renderDataClient = function(dateText) {
     $.ajax({
         type: 'POST',
-        url: '/api/get_client_information',
+        url: '/api/super_user/get_client_data',
         data: JSON.stringify({
             "date_text": dateText,
         }),
         contentType: 'application/json',
         headers: {
-          "Access-Token": localStorage.getItem("accessToken")
+          "Access-Token": accessToken
         },
         success: function(response, status) {
             const dataContents = $("#data_contents")
@@ -40,13 +42,36 @@ $(document).ready(function() {
         },
         onSelect: function (dateText) {
             renderDataClient(dateText)
-        },
-        onopen: function () {
-            const selectedDate = $('#datepicker').datepicker('getDate');
-            renderDataClient(initialDate)
-            console.log('Selected Date on opening:', selectedDate);
         }
     });
 
     dateBox.datepicker("setDate", new Date());
+    const initialDate = $.datepicker.formatDate("dd/mm/yy", $("#datepicker").datepicker("getDate"));
+    renderDataClient(initialDate)
 });
+
+function deleteClientData(buttonElement) {
+    const clientId = $(buttonElement).parents("#information_client").attr('client-id')
+    const dateText = $.datepicker.formatDate("dd/mm/yy", $("#datepicker").datepicker("getDate"))
+
+    const userConfirmed = confirm("您确定要执行这个操作吗？");
+    if (userConfirmed) {
+        $.ajax({
+            type: 'POST',
+            url: '/api/super_user/delete_client_data',
+            data: JSON.stringify({
+                "client_id": clientId,
+                "date_text": dateText
+            }),
+            contentType: 'application/json',
+            headers: {
+              "Access-Token": accessToken,
+              "date_text": dateText,
+            },
+            success: function(response, status) {
+                alert(response.message);
+                renderDataClient(dateText)
+            }
+        });
+    }
+}

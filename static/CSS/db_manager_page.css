@@ -28,7 +28,7 @@ body {
     animation: animation_for_datepicker 1s ease-out;
 }
 
-#infomation_client {
+#information_client {
     position: relative;
     height: 300px;
     border: 2px solid #8787cb;
@@ -36,7 +36,7 @@ body {
     overflow: hidden;
 }
 
-#infomation_client::before {
+#information_client::before {
     content: '';
     position: absolute;
     top: 0; /* 调整位置以覆盖边框 */
@@ -49,6 +49,6 @@ body {
     z-index: -1;
 }
 
-#infomation_client *:not(button) {
+#information_client *:not(button) {
     color: black;
 }

@@ -54,7 +54,7 @@ const loginAccount = function() {
         success: function(response, status) {
             localStorage.setItem("accessToken", response.token);
             document.cookie = "ACCESS_TOKEN=" + response.token
-            window.location.href = "/super_user_gestion"
+            window.location.href = "/super_user/database_manager"
         },
         error: function(response, status) {
             errorMessageLabel.text(response.responseJSON.message)

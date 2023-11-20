@@ -174,21 +174,21 @@ def api_super_user_login():
 
 
 """ Protected page"""
-@app.route('/super_user_gestion', methods=['GET'])
-def super_user_gestion():
+@app.route('/super_user/database_manager', methods=['GET'])
+def database_manager():
     access_token = request.cookies.get('ACCESS_TOKEN')
     current_user, status_code, response = validate_jwt_from_cookie(access_token)
 
     if current_user is not None:
         favicon_img = url_for('static', filename='images/favicon.png')
 
-        return render_template('super_user_gestion.html', favicon = favicon_img)
+        return render_template('database_manager.html', favicon = favicon_img)
     else:
         return response, status_code
 
 
 ''' Protected API '''
-@app.route('/api/get_client_information', methods=['POST'])
+@app.route('/api/super_user/get_client_data', methods=['POST'])
 @jwt_required()
 def get_client_information():
     json_data = request.json
@@ -202,15 +202,20 @@ def get_client_information():
     query = (
         reservation.
             select().
-            where(reservation.date == '-'.join(date_text.split('/')[::-1]))
+            where(reservation.date == '-'.join(date_text.split('/')[::-1])).
+            order_by(reservation.reserve_time)
     )
 
     if query.get_or_none() is None:
-        HTML_content += 'No hay ninguna ciente'
+        HTML_content += f'''
+        <div class="mt-3 pt-4" id="information_client" style="height: auto; text-align: center;">
+            <h3>No hay ninguna ciente</h2>
+            <p style="text-align: end; margin-right: 13px;">{date_text}</p>
+        </div>'''
     else:
         for row in query:
             HTML_content += f'''
-            <div class="mt-3 pt-4" id="infomation_client" client-id="{row.id}">
+            <div class="mt-3 pt-4" id="information_client" client-id="{row.id}">
              <div class="px-3" id="information_detail">
                  <p>Nombre: {row.name}</p>
                  <p>Apellido: {row.last_name}</p>
@@ -218,7 +223,7 @@ def get_client_information():
                  <p>Personas: {row.people}</p>
                  <p>Tiempo: {row.reserve_time}</p>
                  <div class="d-flex justify-content-between align-items-center pt-2" id="flex_box">
-                     <button class="btn btn-primary" id="button_delete_data">Eliminar</button>
+                     <button class="btn btn-primary" id="button_delete_data" onClick="deleteClientData(this)">Eliminar</button>
                      <p class="m-0">{row.date.strftime('%d/%m/%Y')}</p>
                  </div>
              </div>
@@ -226,6 +231,32 @@ def get_client_information():
 
     return HTML_content
 
+
+@app.route('/api/super_user/delete_client_data', methods=['POST'])
+@jwt_required()
+def delete_client_data():
+    json_data = request.json
+    client_id = json_data["client_id"]
+    date_text = json_data["date_text"]
+
+    reservation = db.Reservation
+
+    try:
+        client_to_delete = reservation.get((reservation.id == client_id) & (reservation.date == '-'.join(date_text.split('/')[::-1])))
+        client_to_delete.delete_instance()
+        response = {
+            'message': '删除成功',
+            'status': "success",
+            'status_code': 200,
+        }
+    except reservation.DoesNotExist:
+        response = {
+            'message': '删除失败, 查询不到数据',
+            'status': "error",
+            'status_code': 400
+        }
+
+    return response
 
 if __name__ == '__main__':
     app.run()
