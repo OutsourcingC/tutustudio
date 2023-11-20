@@ -154,7 +154,7 @@ def api_super_user_login():
     else:
         additional_claims = {
             'sub': username,  # 用户标识
-            'exp': datetime.utcnow() + timedelta(hours = 2, seconds=30)  # 有效时间为1小时
+            'exp': datetime.utcnow() + timedelta(hours = 48)  # 有效时间为1小时
         }
 
         # 生成token
