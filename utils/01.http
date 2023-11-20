@@ -1,6 +1,0 @@
-POST http://localhost:5000/api/get_client_information
-Content-Type: application/json
-
-{
-  "date_text": "20/11/2023"
-}
