@@ -131,4 +131,8 @@
     animation: animation_for_other_elements 3s ease;
 }
 
-
+#tutustudioBCN {
+    background-image: url("../images/background_image.jpg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}

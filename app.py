@@ -32,7 +32,17 @@ def home():
         url_for('static', filename='images/5.jpg'),
         url_for('static', filename='images/6.jpg'),
     ]
-    return render_template('index.html', image_urls=image_urls, favicon=favicon_img)
+
+    tutu_bcn_image_urls = [
+        url_for('static', filename = 'images/tuftBCNimages/1.jpg'),
+        url_for('static', filename = 'images/tuftBCNimages/2.jpg'),
+    ]
+    return render_template(
+        'index.html',
+        favicon=favicon_img,
+        image_urls=image_urls,
+        tutu_bcn_image_urls=tutu_bcn_image_urls,
+    )
 
 
 @app.route('/reserve', methods=['GET'])
